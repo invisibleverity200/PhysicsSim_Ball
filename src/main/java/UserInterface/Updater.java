@@ -1,7 +1,7 @@
 package UserInterface;
 
 import Physics.Enteties.Particle;
-import Physics.Enteties.PhysicsCalculations;
+import Physics.Enteties.PhysicEngine;
 
 import java.awt.*;
 import java.io.IOException;
@@ -28,16 +28,19 @@ public class Updater implements Runnable {
             if (!gui.pause) {
                 try {
                     Thread.sleep(10);
-
+                    int idx = 0;
                     for (Particle particle : p) {
-                        groundState = particle.calculateNewPosition(
-                                PhysicsCalculations.calculateForceVector(particle, groundState,
-                                        PhysicsCalculations.calculateDragVector(particle.getArea(), particle.getVelocity(), particle.getAirDensity(), particle.getDragC())
+                        double[] collisionVector = PhysicEngine.getResVectorCollision(p, idx);
+                        particle.setGroundState(particle.calculateNewPosition(
+                                PhysicEngine.calculateForceVector(particle, particle.getGroundState(),
+                                        PhysicEngine.calculateDragVector(particle.getArea(), particle.getVelocity(), particle.getAirDensity(), particle.getDragC()),
+                                        collisionVector
                                 )
-                                , 0.01);
+                                , 0.01));
 
-                        gui.spacer1.setText("Velocity: " + ((float) PhysicsCalculations.getVectorValue(particle.getVelocity())) + " [m/s]");
-                        gui.height.setText("Height : " + (float) (910-particle.getPosition()[1])/100 + " m");
+                        gui.spacer1.setText("Velocity: " + ((float) PhysicEngine.getVectorValue(particle.getVelocity())) + " [m/s]");
+                        gui.height.setText("Height : " + (float) (910 - particle.getPosition()[1]) / 100 + " m");
+                        idx++;
                     }
 
                     canvas.draw(p, gui.snapshot);
@@ -47,7 +50,7 @@ public class Updater implements Runnable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 System.out.println(""); //FIXME without that the continue function is not working
             }
         }

@@ -13,6 +13,8 @@ public class ParticleType implements Particle {
     private volatile double cFriction;
     private volatile double airDensity;
     private volatile ArrayList<double[]> prevPos = new ArrayList<>();
+    private volatile int hitBoxRadius = 20;
+    private volatile boolean[] groundState = {false, false};
 
     public ParticleType(double mass, double[] position, double[] velocity, double gravity, double area, double cDrag, double cElasticy, double cFriction, double airDensity) {
         this.mass = mass;
@@ -44,6 +46,16 @@ public class ParticleType implements Particle {
     @Override
     public double[] getVelocity() {
         return velocity;
+    }
+
+    @Override
+    public boolean[] getGroundState() {
+        return groundState;
+    }
+
+    @Override
+    public void setGroundState(boolean[] state) {
+        this.groundState = state;
     }
 
     @Override
@@ -136,6 +148,16 @@ public class ParticleType implements Particle {
     @Override
     public double getElasisyC() {
         return cElasticy;
+    }
+
+    @Override
+    public int getHitBoxRadius() {
+        return hitBoxRadius;
+    }
+
+    @Override
+    public double getVelMagnitude() {
+        return Math.sqrt(Math.pow(getVelocity()[0], 2) + Math.pow(getVelocity()[1], 2));
     }
 
     @Override

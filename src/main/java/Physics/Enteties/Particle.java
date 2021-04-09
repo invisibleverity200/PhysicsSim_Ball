@@ -10,6 +10,10 @@ public interface Particle {
 
     double[] getVelocity();
 
+    boolean[] getGroundState();
+
+    void setGroundState(boolean[] state);
+
     void setPos(double[] pos);
 
     double getMass();
@@ -29,6 +33,10 @@ public interface Particle {
     double getFrictionC();
 
     double getElasisyC();
+
+    int getHitBoxRadius();
+
+    double getVelMagnitude();
 
     double getAirDensity();
 
